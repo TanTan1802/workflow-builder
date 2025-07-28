@@ -36,7 +36,7 @@ A sophisticated, modern workflow builder application built with Angular 18, feat
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/workflow-builder.git
+git clone https://github.com/TanTan1802/workflow-builder.git
 cd workflow-builder
 
 # Install dependencies
@@ -134,7 +134,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Contact
 
-Project Link: [https://github.com/yourusername/workflow-builder](https://github.com/yourusername/workflow-builder)
+Project Link: [https://github.com/TanTan1802/workflow-builder](https://github.com/TanTan1802/workflow-builder)
 
 ## 🧪 Testing
 
