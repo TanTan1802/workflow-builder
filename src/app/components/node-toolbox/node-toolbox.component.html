@@ -1,0 +1,188 @@
+<!-- Modern Node Toolbox Sidebar -->
+<div class="sidebar h-full flex flex-col"
+     [class.w-toolbox]="!isCollapsed"
+     [class.w-toolbox-collapsed]="isCollapsed">
+
+  <!-- Sidebar Header -->
+  <div class="p-6 border-b"
+       style="border-bottom: 1px solid var(--color-border-light);">
+    <div class="flex items-center justify-between">
+      <div *ngIf="!isCollapsed" class="animate-fade-in">
+        <h2 class="text-toolbox-title font-bold text-text-primary">Nodes</h2>
+        <p class="text-sm color: var(--color-text-secondary) mt-1">
+          Drag nodes to canvas
+        </p>
+      </div>
+      <button
+        (click)="toggleSidebar()"
+        class="p-2 rounded-lg transition-all duration-200"
+        style="background: transparent; border: none; cursor: pointer; color: var(--color-text-secondary);"
+        [attr.aria-label]="isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+      >
+        <svg class="w-5 h-5 transition-transform"
+             [class.rotate-180]="isCollapsed"
+             style="color: var(--color-text-secondary);"
+             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Search Bar (hidden when collapsed) -->
+  <div *ngIf="!isCollapsed" class="p-4 border-b animate-fade-in"
+       style="border-bottom: 1px solid var(--color-border-light);">
+    <div class="relative">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+        placeholder="Search nodes..."
+        class="w-full pl-10 pr-4 py-2 rounded-lg border transition-all duration-200
+               focus:outline-none focus:ring-2 focus:border-transparent"
+        style="border: 1px solid var(--color-border-light);
+               background-color: var(--color-surface-light);
+               color: var(--color-text-primary);
+               --tw-ring-color: var(--color-primary);"
+      >
+      <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4"
+           style="color: var(--color-text-tertiary);"
+           fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Node Categories -->
+  <div class="flex-1 overflow-y-auto custom-scrollbar">
+    <div class="p-2">
+
+      <!-- Collapsed view - Category icons only -->
+      <div *ngIf="isCollapsed" class="space-y-3">
+        <div *ngFor="let category of getFilteredCategories() | keyvalue"
+             class="flex justify-center">
+          <button
+            (click)="toggleCategory(category.key)"
+            class="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 group relative"
+            style="background: transparent; border: none; cursor: pointer;"
+            [title]="category.key + ' (' + category.value.length + ' nodes)'"
+          >
+            <span class="text-lg">{{ getCategoryIcon(category.key) }}</span>
+
+            <!-- Tooltip for collapsed view -->
+            <div class="absolute left-full ml-2 px-2 py-1 text-xs
+                        rounded opacity-0 group-hover:opacity-100 transition-opacity z-10
+                        whitespace-nowrap pointer-events-none"
+                 style="background-color: #1F2937; color: white;">
+              {{ category.key }} ({{ category.value.length }})
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Expanded view - Full categories -->
+      <div *ngIf="!isCollapsed" class="animate-fade-in">
+        <div *ngFor="let category of getFilteredCategories() | keyvalue"
+             class="mb-4">
+
+          <!-- Category Header -->
+          <button
+            (click)="toggleCategory(category.key)"
+            class="w-full flex items-center justify-between p-3 text-left rounded-lg
+                   transition-all duration-200 group"
+            style="background: transparent; border: none; cursor: pointer;"
+          >
+            <div class="flex items-center space-x-3">
+              <span class="text-lg flex-shrink-0">{{ getCategoryIcon(category.key) }}</span>
+              <div>
+                <span class="font-medium"
+                      style="color: var(--color-text-primary);">
+                  {{ category.key }}
+                </span>
+                <span class="text-xs ml-2 px-2 py-1 rounded-full"
+                      style="background-color: var(--color-primary); color: white;">
+                  {{ category.value.length }}
+                </span>
+              </div>
+            </div>
+            <svg
+              class="w-5 h-5 transition-transform duration-200"
+              [class.rotate-90]="isCategoryExpanded(category.key)"
+              style="color: var(--color-text-secondary);"
+              fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+
+          <!-- Category Nodes -->
+          <div *ngIf="isCategoryExpanded(category.key)"
+               class="mt-3 ml-3 space-y-2 animate-slide-up">
+            <div
+              *ngFor="let template of category.value; trackBy: trackByTemplate"
+              draggable="true"
+              (dragstart)="onDragStart($event, template)"
+              (click)="onNodeClick(template)"
+              class="node-card flex items-center p-3 rounded-lg cursor-pointer
+                     transition-all duration-200 group border"
+              style="background-color: var(--color-surface-light);
+                     border: 1px solid var(--color-border-light);"
+              [title]="template.description"
+            >
+              <!-- Node Icon -->
+              <div
+                class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center
+                       justify-center text-white text-sm font-bold mr-3 shadow-sm"
+                [style.background]="getNodeGradient(template.color)"
+              >
+                {{ template.icon }}
+              </div>
+
+              <!-- Node Content -->
+              <div class="flex-1 min-w-0">
+                <p class="font-medium truncate"
+                   style="color: var(--color-text-primary);">
+                  {{ template.label }}
+                </p>
+                <p class="text-xs truncate mt-1"
+                   style="color: var(--color-text-secondary);">
+                  {{ template.description }}
+                </p>
+              </div>
+
+              <!-- Drag Indicator -->
+              <div class="flex-shrink-0 opacity-0 group-hover:opacity-100
+                          transition-opacity duration-200">
+                <svg class="w-4 h-4"
+                     style="color: var(--color-primary);"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Stats (hidden when collapsed) -->
+  <div *ngIf="!isCollapsed"
+       class="p-4 border-t animate-fade-in"
+       style="border-top: 1px solid var(--color-border-light);">
+    <div class="text-center space-y-1">
+      <p class="text-xs font-medium"
+         style="color: var(--color-text-secondary);">
+        {{ getVisibleCategoriesCount() }} categories
+      </p>
+      <p class="text-xs"
+         style="color: var(--color-text-tertiary);">
+        {{ getVisibleNodesCount() }} nodes available
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,138 @@
+<div
+  class="workflow-node absolute cursor-pointer select-none"
+  [style.left.px]="node.position.x"
+  [style.top.px]="node.position.y"
+  [style.transform]="'scale(' + scale + ')'"
+  [class.selected]="selected"
+  (mousedown)="onMouseDown($event)"
+  (click)="onClick($event)"
+  (dblclick)="onDoubleClick($event)"
+>
+  <!-- Node Container -->
+  <div
+    class="node-container bg-white rounded-lg shadow-node hover:shadow-node-hover transition-all duration-200 min-w-[200px] border-2"
+    [class.border-primary-500]="selected"
+    [class.border-gray-200]="!selected"
+    [style.border-color]="selected ? '#3b82f6' : '#e5e7eb'"
+  >
+    <!-- Node Header -->
+    <div
+      class="node-header px-4 py-3 rounded-t-lg text-white flex items-center justify-between"
+      [style.background-color]="nodeTemplate?.color || '#6b7280'"
+    >
+      <div class="flex items-center space-x-2 flex-1 min-w-0">
+        <span class="text-lg">{{ nodeTemplate?.icon || '📦' }}</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="font-medium text-sm truncate">{{ node.data.label }}</h3>
+          <p class="text-xs opacity-80 truncate">{{ nodeTemplate?.description || node.type }}</p>
+        </div>
+      </div>
+
+      <!-- Status Indicator -->
+      <div class="flex items-center space-x-1">
+        <div
+          *ngIf="node.status && node.status !== NodeStatus.IDLE"
+          class="flex items-center space-x-1"
+          [title]="node.status"
+        >
+          <span class="text-sm">{{ getStatusIcon() }}</span>
+        </div>
+
+        <!-- Delete Button -->
+        <button
+          (click)="onDelete($event)"
+          class="opacity-0 group-hover:opacity-100 hover:bg-white hover:bg-opacity-20 rounded p-1 transition-all"
+          title="Delete node"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Node Body -->
+    <div class="node-body p-4">
+      <!-- Input Handles -->
+      <div *ngIf="node.inputs.length > 0" class="mb-3">
+        <div class="text-xs font-medium text-gray-500 mb-2">Inputs</div>
+        <div class="space-y-1">
+          <div
+            *ngFor="let input of node.inputs"
+            class="flex items-center space-x-2 text-sm"
+          >
+            <div class="input-handle w-3 h-3 rounded-full bg-blue-400 border-2 border-white shadow-sm"></div>
+            <span class="text-gray-700">{{ input.label }}</span>
+            <span class="text-xs text-gray-400">({{ input.type }})</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Configuration Preview -->
+      <div *ngIf="hasConfiguration()" class="mb-3">
+        <div class="text-xs font-medium text-gray-500 mb-2">Configuration</div>
+        <div class="text-xs text-gray-600 bg-gray-50 rounded p-2">
+          <div *ngFor="let config of getConfigPreview()" class="truncate">
+            <span class="font-medium">{{ config.key }}:</span> {{ config.value }}
+          </div>
+          <div *ngIf="getConfigCount() > 3" class="text-gray-400 mt-1">
+            +{{ getConfigCount() - 3 }} more...
+          </div>
+        </div>
+      </div>
+
+      <!-- Output Handles -->
+      <div *ngIf="node.outputs.length > 0">
+        <div class="text-xs font-medium text-gray-500 mb-2">Outputs</div>
+        <div class="space-y-1">
+          <div
+            *ngFor="let output of node.outputs"
+            class="flex items-center justify-end space-x-2 text-sm"
+          >
+            <span class="text-gray-400 text-xs">({{ output.type }})</span>
+            <span class="text-gray-700">{{ output.label }}</span>
+            <div class="output-handle w-3 h-3 rounded-full bg-green-400 border-2 border-white shadow-sm"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Bar -->
+    <div
+      *ngIf="node.status && node.status !== NodeStatus.IDLE"
+      class="node-status-bar px-4 py-2 border-t border-gray-100 rounded-b-lg text-xs"
+      [style.background-color]="getStatusColor() + '20'"
+      [style.color]="getStatusColor()"
+    >
+      <div class="flex items-center justify-between">
+        <span class="font-medium">{{ node.status | titlecase }}</span>
+        <div *ngIf="node.status === NodeStatus.RUNNING" class="loading-spinner">
+          <div class="animate-spin w-3 h-3 border border-current border-t-transparent rounded-full"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connection Points -->
+  <div class="connection-points">
+    <!-- Input connection points -->
+    <div
+      *ngFor="let input of node.inputs; let i = index"
+      class="connection-point input-point absolute w-4 h-4 bg-blue-500 border-2 border-white rounded-full shadow-sm cursor-crosshair hover:scale-110 transition-transform"
+      [style.left.px]="-8"
+      [style.top.px]="60 + (i * 24)"
+      [attr.data-input-id]="input.id"
+      title="Connect input: {{ input.label }}"
+    ></div>
+
+    <!-- Output connection points -->
+    <div
+      *ngFor="let output of node.outputs; let i = index"
+      class="connection-point output-point absolute w-4 h-4 bg-green-500 border-2 border-white rounded-full shadow-sm cursor-crosshair hover:scale-110 transition-transform"
+      [style.right.px]="-8"
+      [style.top.px]="60 + (i * 24)"
+      [attr.data-output-id]="output.id"
+      title="Connect output: {{ output.label }}"
+    ></div>
+  </div>
+</div>

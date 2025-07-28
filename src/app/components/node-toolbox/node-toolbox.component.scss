@@ -1,0 +1,20 @@
+// Node Toolbox specific styles
+.toolbox {
+  user-select: none;
+}
+
+.node-item {
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+// Drag preview styles
+.drag-preview {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.8;
+}
