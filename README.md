@@ -1,142 +1,142 @@
-# 🚀 Modern Workflow Builder
+# 🚀 Công Cụ Xây Dựng Workflow Hiện Đại
 
-A sophisticated, modern workflow builder application built with Angular 18, featuring an intuitive drag-and-drop interface, dark/light mode support, and a comprehensive node-based workflow system.
+Một ứng dụng xây dựng workflow hiện đại và tinh vi được phát triển với Angular 18, tích hợp giao diện kéo-thả trực quan, hỗ trợ chế độ sáng/tối và hệ thống workflow dựa trên node toàn diện.
 
 ![Workflow Builder](https://img.shields.io/badge/Angular-18-red?style=for-the-badge&logo=angular)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue?style=for-the-badge&logo=typescript)
 ![CSS3](https://img.shields.io/badge/CSS3-Modern-blue?style=for-the-badge&logo=css3)
 
-## ✨ Features
+## ✨ Tính Năng
 
-### 🎨 **Modern UI/UX**
-- **Responsive Design**: Optimized for desktop and tablet
-- **Dark/Light Mode**: Seamless theme switching with system preference detection
-- **Modern Header**: Gradient design with intuitive action buttons
-- **Collapsible Sidebar**: Space-efficient node toolbox
+### 🎨 **Giao Diện Người Dùng Hiện Đại**
+- **Thiết Kế Responsive**: Tối ưu cho desktop và tablet
+- **Chế Độ Sáng/Tối**: Chuyển đổi theme mượt mà với tự động phát hiện thiết lập hệ thống
+- **Header Hiện Đại**: Thiết kế gradient với các nút hành động trực quan
+- **Sidebar Thu Gọn**: Hộp công cụ node tiết kiệm không gian
 
-### 🔧 **Workflow Management**
-- **Drag & Drop**: Intuitive node placement and workflow creation
-- **Node Categories**: Organized templates (Data & API, Communication, Logic & Control)
-- **Visual Canvas**: Grid-based workflow canvas with zoom controls
-- **Node Editor**: Modal-based property editing
+### 🔧 **Quản Lý Workflow**
+- **Kéo & Thả**: Đặt node và tạo workflow một cách trực quan
+- **Phân Loại Node**: Template được tổ chức (Dữ liệu & API, Giao tiếp, Logic & Điều khiển)
+- **Canvas Trực Quan**: Canvas workflow dạng lưới với điều khiển zoom
+- **Trình Chỉnh Sửa Node**: Chỉnh sửa thuộc tính dạng modal
 
-### 🛠 **Technical Excellence**
-- **Angular 18**: Latest standalone components architecture
-- **TypeScript Strict**: Full type safety and modern development
-- **RxJS Signals**: Reactive state management
-- **Custom CSS**: BEM methodology with CSS variables
-- **Performance**: Optimized bundle size and lazy loading ready
+### 🛠 **Xuất Sắc Về Kỹ Thuật**
+- **Angular 18**: Kiến trúc standalone components mới nhất
+- **TypeScript Strict**: Đảm bảo type safety và phát triển hiện đại
+- **RxJS Signals**: Quản lý state reactive
+- **CSS Tùy Chỉnh**: Phương pháp BEM với CSS variables
+- **Hiệu Năng**: Kích thước bundle tối ưu và sẵn sàng lazy loading
 
-## 🚀 Quick Start
+## 🚀 Bắt Đầu Nhanh
 
-### Prerequisites
+### Yêu Cầu Hệ Thống
 - Node.js 18+ 
-- npm or yarn
+- npm hoặc yarn
 
-### Installation
+### Cài Đặt
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/TanTan1802/workflow-builder.git
 cd workflow-builder
 
-# Install dependencies
+# Cài đặt dependencies
 npm install
 
-# Start development server
+# Khởi động development server
 npm start
 ```
 
-### Building for Production
+### Xây Dựng Cho Production
 ```bash
-# Build the application
+# Build ứng dụng
 npm run build
 
-# Serve the built application
+# Chạy ứng dụng đã build
 cd dist/workflow-builder/browser
 node -e "const http = require('http'); const fs = require('fs'); const path = require('path'); const server = http.createServer((req, res) => { let filePath = '.' + req.url; if (filePath === './') filePath = './index.html'; const extname = String(path.extname(filePath)).toLowerCase(); const mimeTypes = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css' }; const contentType = mimeTypes[extname] || 'application/octet-stream'; fs.readFile(filePath, (error, content) => { if (error) { if(error.code == 'ENOENT') { res.writeHead(404); res.end('File not found'); } else { res.writeHead(500); res.end('Server error'); } } else { res.writeHead(200, { 'Content-Type': contentType }); res.end(content, 'utf-8'); } }); }); server.listen(4200, () => console.log('Server running at http://localhost:4200'));"
 ```
 
-## 📁 Project Structure
+## 📁 Cấu Trúc Dự Án
 
 ```
 src/
 ├── app/
 │   ├── components/
-│   │   ├── node-toolbox/          # Sidebar with node templates
-│   │   ├── workflow-canvas/       # Main canvas area
-│   │   ├── workflow-node/         # Individual workflow nodes
-│   │   └── node-editor/           # Node property editor
+│   │   ├── node-toolbox/          # Sidebar với node templates
+│   │   ├── workflow-canvas/       # Khu vực canvas chính
+│   │   ├── workflow-node/         # Các workflow node riêng lẻ
+│   │   └── node-editor/           # Trình chỉnh sửa thuộc tính node
 │   ├── models/
-│   │   └── workflow.models.ts     # Data models and interfaces
+│   │   └── workflow.models.ts     # Data models và interfaces
 │   ├── services/
-│   │   ├── workflow.service.ts    # Workflow state management
-│   │   ├── theme.service.ts       # Dark/light mode handling
-│   │   └── node-template.service.ts # Node templates provider
-│   ├── app.ts                     # Main app component
-│   ├── app.html                   # App template
-│   └── app.scss                   # Global styles
-└── styles.scss                    # Global stylesheet
+│   │   ├── workflow.service.ts    # Quản lý state workflow
+│   │   ├── theme.service.ts       # Xử lý chế độ sáng/tối
+│   │   └── node-template.service.ts # Cung cấp node templates
+│   ├── app.ts                     # Component ứng dụng chính
+│   ├── app.html                   # Template ứng dụng
+│   └── app.scss                   # Styles toàn cục
+└── styles.scss                    # Stylesheet toàn cục
 ```
 
-## 🎯 Available Node Types
+## 🎯 Các Loại Node Có Sẵn
 
-### 📊 Data & API
-- **HTTP Request**: Make API calls
-- **Database Query**: Execute database operations
-- **JSON Parser**: Parse and manipulate JSON data
-- **CSV Reader**: Read CSV files
+### 📊 Dữ Liệu & API
+- **HTTP Request**: Thực hiện API calls
+- **Database Query**: Thực thi các thao tác database
+- **JSON Parser**: Phân tích và thao tác dữ liệu JSON
+- **CSV Reader**: Đọc file CSV
 
-### 📞 Communication
-- **Email Sender**: Send email notifications
-- **SMS Notification**: Send SMS messages
-- **Slack Message**: Post to Slack channels
-- **Webhook**: Trigger external webhooks
+### 📞 Giao Tiếp
+- **Email Sender**: Gửi thông báo email
+- **SMS Notification**: Gửi tin nhắn SMS
+- **Slack Message**: Đăng lên Slack channels
+- **Webhook**: Kích hoạt webhook bên ngoài
 
-### 🔧 Logic & Control
-- **Conditional**: IF/ELSE logic branches
-- **Loop**: Iterate over data sets
-- **Delay**: Add time delays
-- **Transformer**: Transform data formats
+### 🔧 Logic & Điều Khiển
+- **Conditional**: Nhánh logic IF/ELSE
+- **Loop**: Lặp qua tập dữ liệu
+- **Delay**: Thêm độ trễ thời gian
+- **Transformer**: Chuyển đổi định dạng dữ liệu
 
-## 🔧 Development
+## 🔧 Phát Triển
 
-### Available Scripts
-- `npm start` - Start development server
-- `npm run build` - Build for production
-- `npm run test` - Run unit tests
-- `npm run lint` - Run linting
+### Các Scripts Có Sẵn
+- `npm start` - Khởi động development server
+- `npm run build` - Build cho production
+- `npm run test` - Chạy unit tests
+- `npm run lint` - Chạy linting
 
-### Code Standards
-- **TypeScript Strict Mode**: Enabled for type safety
-- **Angular Style Guide**: Following official conventions
-- **BEM CSS**: Block Element Modifier methodology
-- **Reactive Programming**: RxJS observables and signals
+### Tiêu Chuẩn Code
+- **TypeScript Strict Mode**: Bật để đảm bảo type safety
+- **Angular Style Guide**: Tuân theo quy ước chính thức
+- **BEM CSS**: Phương pháp Block Element Modifier
+- **Reactive Programming**: RxJS observables và signals
 
-## 🌟 Key Technologies
+## 🌟 Công Nghệ Chính
 
-- **Angular 18**: Modern framework with standalone components
-- **TypeScript 5.5**: Strict type checking and latest features
-- **RxJS**: Reactive programming and state management
-- **CSS Variables**: Modern styling with theme support
-- **Angular Material**: Component library integration ready
+- **Angular 18**: Framework hiện đại với standalone components
+- **TypeScript 5.5**: Kiểm tra type nghiêm ngặt và tính năng mới nhất
+- **RxJS**: Lập trình reactive và quản lý state
+- **CSS Variables**: Styling hiện đại với hỗ trợ theme
+- **Angular Material**: Sẵn sàng tích hợp thư viện component
 
-## 📝 License
+## 📝 Giấy Phép
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Dự án này được cấp phép theo MIT License - xem file [LICENSE](LICENSE) để biết chi tiết.
 
-## 🤝 Contributing
+## 🤝 Đóng Góp
 
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Fork dự án
+2. Tạo feature branch của bạn (`git checkout -b feature/TinhNangTuyetVoi`)
+3. Commit các thay đổi (`git commit -m 'Thêm tính năng tuyệt vời'`)
+4. Push lên branch (`git push origin feature/TinhNangTuyetVoi`)
+5. Mở Pull Request
 
-## 📧 Contact
+## 📧 Liên Hệ
 
-Project Link: [https://github.com/TanTan1802/workflow-builder](https://github.com/TanTan1802/workflow-builder)
+Link dự án: [https://github.com/TanTan1802/workflow-builder](https://github.com/TanTan1802/workflow-builder)
 
-## 🧪 Testing
+## 🧪 Kiểm Thử
 
 ### Unit Tests
 ```bash
@@ -148,33 +148,33 @@ ng test
 ng e2e
 ```
 
-## 🚀 Deployment
+## 🚀 Triển Khai
 
-### Build for Production
+### Build Cho Production
 ```bash
 npm run build
 ```
 
-### Static File Serving
-After building, you can serve the static files using any web server:
+### Phục Vụ File Tĩnh
+Sau khi build, bạn có thể phục vụ các file tĩnh bằng bất kỳ web server nào:
 ```bash
-# Using Node.js
+# Sử dụng Node.js
 cd dist/workflow-builder/browser
 node -e "const http=require('http'),fs=require('fs'),path=require('path');http.createServer((req,res)=>{let filePath='.'+(req.url==='/'?'/index.html':req.url);fs.readFile(filePath,(err,content)=>{if(err){res.writeHead(404);res.end('Not found');}else{res.writeHead(200,{'Content-Type':({'html':'text/html','.js':'text/javascript','.css':'text/css'})[path.extname(filePath)]||'application/octet-stream'});res.end(content);}});}).listen(4200,()=>console.log('Server: http://localhost:4200'));"
 
-# Using Python
+# Sử dụng Python
 python -m http.server 4200
 
-# Using live-server
+# Sử dụng live-server
 npx live-server dist/workflow-builder/browser --port=4200
 ```
 
-## 📊 Performance
+## 📊 Hiệu Năng
 
-- **Bundle Size**: ~421KB (optimized)
-- **Load Time**: <2s on modern browsers
-- **Lighthouse Score**: 90+ (Performance, Accessibility, Best Practices)
+- **Kích Thước Bundle**: ~421KB (đã tối ưu)
+- **Thời Gian Tải**: <2s trên trình duyệt hiện đại
+- **Điểm Lighthouse**: 90+ (Hiệu năng, Khả năng tiếp cận, Thực hành tốt nhất)
 
 ---
 
-⭐ **Star this project if you find it helpful!**
+⭐ **Hãy star dự án này nếu bạn thấy hữu ích!**
