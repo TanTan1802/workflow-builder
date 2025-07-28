@@ -17,7 +17,7 @@ docker info >nul 2>&1
 if %errorlevel% neq 0 (
     echo ⚠️  Docker is not running. Starting Docker Desktop...
     start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"
-    
+
     echo ⏳ Waiting for Docker to start...
     :wait_loop
     docker info >nul 2>&1
@@ -35,11 +35,11 @@ call npm run build
 
 if %errorlevel% equ 0 (
     echo ✅ Application built successfully!
-    
+
     REM Build Docker image
     echo 🐳 Building Docker image...
     docker build -t workflow-builder:latest .
-    
+
     if %errorlevel% equ 0 (
         echo ✅ Docker image built successfully!
         echo.

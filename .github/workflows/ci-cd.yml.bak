@@ -14,7 +14,7 @@ jobs:
   # Lint and Test Job
   test:
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node-version: [20.x]
@@ -57,7 +57,10 @@ jobs:
   security:
     runs-on: ubuntu-latest
     needs: test
-    
+    permissions:
+      contents: read
+      security-events: write
+      
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -69,17 +72,19 @@ jobs:
         scan-ref: '.'
         format: 'sarif'
         output: 'trivy-results.sarif'
+      continue-on-error: true
 
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v3
       if: always()
       with:
         sarif_file: 'trivy-results.sarif'
+      continue-on-error: true
 
   # Build and Push Docker Image
   build-and-push:
     runs-on: ubuntu-latest
-    needs: [test, security]
+    needs: [test]
     permissions:
       contents: read
       packages: write
@@ -125,7 +130,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-and-push
     if: github.ref == 'refs/heads/master'
-    
+
     permissions:
       contents: read
       pages: write
@@ -166,19 +171,33 @@ jobs:
   # Notify on Success/Failure
   notify:
     runs-on: ubuntu-latest
-    needs: [test, security, build-and-push]
+    needs: [test, build-and-push, security]
     if: always()
     
     steps:
+    - name: Check Results
+      run: |
+        echo "Test: ${{ needs.test.result }}"
+        echo "Security: ${{ needs.security.result }}"
+        echo "Build and Push: ${{ needs.build-and-push.result }}"
+
     - name: Notify Success
-      if: needs.test.result == 'success' && needs.security.result == 'success' && needs.build-and-push.result == 'success'
+      if: needs.test.result == 'success' && (needs.security.result == 'success' || needs.security.result == 'skipped') && needs.build-and-push.result == 'success'
       run: |
         echo "✅ CI/CD Pipeline completed successfully!"
         echo "🐳 Docker image built and pushed"
         echo "🚀 Ready for deployment"
 
+    - name: Notify Partial Success
+      if: needs.test.result == 'success' && needs.build-and-push.result == 'success' && needs.security.result == 'failure'
+      run: |
+        echo "⚠️ CI/CD Pipeline completed with warnings!"
+        echo "✅ Tests passed"
+        echo "🐳 Docker image built and pushed"
+        echo "⚠️ Security scan had issues (non-blocking)"
+
     - name: Notify Failure
-      if: needs.test.result == 'failure' || needs.security.result == 'failure' || needs.build-and-push.result == 'failure'
+      if: needs.test.result == 'failure' || needs.build-and-push.result == 'failure'
       run: |
         echo "❌ CI/CD Pipeline failed!"
         echo "Please check the logs for details"

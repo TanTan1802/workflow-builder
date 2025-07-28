@@ -75,17 +75,17 @@ jobs:
         release_name: Release ${{ github.ref }}
         body: |
           🚀 **New Release: ${{ steps.version.outputs.VERSION }}**
-          
+
           ## 📦 Docker Images
           - `${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }}`
           - `${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest`
-          
+
           ## 🐳 Quick Start
           ```bash
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }}
           docker run -d -p 8080:80 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }}
           ```
-          
+
           ## 📋 Changes
           See [CHANGELOG.md](CHANGELOG.md) for detailed changes.
         draft: false

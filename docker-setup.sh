@@ -24,7 +24,7 @@ if ! docker info &> /dev/null; then
     else
         sudo systemctl start docker
     fi
-    
+
     echo "⏳ Waiting for Docker to start..."
     while ! docker info &> /dev/null; do
         sleep 2
@@ -39,11 +39,11 @@ npm run build
 
 if [ $? -eq 0 ]; then
     echo "✅ Application built successfully!"
-    
+
     # Build Docker image
     echo "🐳 Building Docker image..."
     docker build -t workflow-builder:latest .
-    
+
     if [ $? -eq 0 ]; then
         echo "✅ Docker image built successfully!"
         echo ""
