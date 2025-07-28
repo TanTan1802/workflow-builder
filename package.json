@@ -7,7 +7,15 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:workflow-builder": "node dist/workflow-builder/server/server.mjs"
+    "serve:ssr:workflow-builder": "node dist/workflow-builder/server/server.mjs",
+    "docker:build": "docker build -t workflow-builder .",
+    "docker:build-dev": "docker build -f Dockerfile.dev -t workflow-builder:dev .",
+    "docker:run": "docker run -p 8080:80 workflow-builder",
+    "docker:run-dev": "docker run -p 4200:4200 -v $(pwd):/app workflow-builder:dev",
+    "docker:compose:up": "docker-compose up",
+    "docker:compose:dev": "docker-compose --profile dev up",
+    "docker:compose:down": "docker-compose down",
+    "docker:clean": "docker system prune -f"
   },
   "prettier": {
     "overrides": [
